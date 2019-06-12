@@ -1,0 +1,98 @@
+<script>
+import rarity from "./rarity.js";
+const rarityNames = Object.keys(rarity);
+let selectedRarity = "iron";
+let goalLevel = rarity[selectedRarity].length;
+const expUnits = {
+  "八倍白胖": 8000,
+  "活動經驗包": 10000,
+  "八倍皇帝": 16000,
+  "小金祝/贈送祝聖": 18000,
+  "小白祝": 19000,
+  "小黑祝": 20000,
+  "八倍黑胖": 40000,
+  "大祝聖哈比": 150000
+};
+const selectedUnits = Object.fromEntries(Object.entries(expUnits).map(([name]) => [name, 0]));
+let totalExp = 0;
+$: requiredMinValue = rarity[selectedRarity][goalLevel - 1] - totalExp;
+let requiredMinLevel = 0;
+let sarietto = false;
+
+// calc total exp
+$: {
+  totalExp = 0;
+  const multiply = sarietto ? 11 : 10;
+  for (const [name, count] of Object.entries(selectedUnits)) {
+    totalExp += count * expUnits[name] * multiply / 10;
+  }
+}
+
+// calc required min level
+$: {
+  // find the level of min value
+  requiredMinLevel = rarity[selectedRarity].findIndex(f => f > requiredMinValue);
+  if (requiredMinLevel < 0) {
+    requiredMinLevel = rarity[selectedRarity].length;
+  }
+  requiredMinLevel--;
+}
+</script>
+
+<style>
+label {
+  display: block;
+}
+input, select {
+  font: inherit;
+  padding: 0.1em 0.3em;
+}
+input[type=number] {
+  width: 100%;
+  box-sizing: border-box;
+}
+.form-group {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  align-items: center;
+}
+.span-2 {
+  grid-column-end: span 2;
+}
+</style>
+
+<h1>Aigis EXP Calculator</h1>
+<p>
+共可獲得 {totalExp} 經驗。
+
+{#if requiredMinValue < 0}
+  經驗值溢出 {-requiredMinValue}。
+{:else}
+  需先餵銅肥至 LV{requiredMinLevel + 1} ({rarity[selectedRarity][requiredMinLevel + 1] - requiredMinValue || '-'})。
+{/if}
+</p>
+<div class="form-group">
+  <label for="rarity">稀有度</label>
+  <select id="rarity" bind:value={selectedRarity}>
+    {#each rarityNames as name}
+      <option value={name}>{name}</option>
+    {/each}
+  </select>
+  <label for="goalLevel">目標等級</label>
+  <input id="goalLevel" type="number" bind:value={goalLevel}>
+  <label class="span-2">
+    <input type="checkbox" bind:checked={sarietto}>
+    使用育成聖靈
+  </label>
+</div>
+<fieldset>
+  <legend>聖靈︰</legend>
+  <div class="form-group">
+    {#each Object.entries(expUnits) as [unitName, value]}
+      <label for={unitName}>
+        {unitName} ({value})
+      </label>
+      <input id={unitName} type="number" bind:value={selectedUnits[unitName]} min="0">
+    {/each}
+  </div>
+</fieldset>

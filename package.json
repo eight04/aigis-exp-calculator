@@ -1,0 +1,25 @@
+{
+  "name": "aigis-exp-calculator",
+  "version": "0.0.0",
+  "devDependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "node-fetch": "^2.6.0",
+    "npm-run-all": "^4.1.5",
+    "rollup": "^1.15.1",
+    "rollup-plugin-cjs-es": "^0.8.0",
+    "rollup-plugin-livereload": "^1.0.0",
+    "rollup-plugin-node-resolve": "^5.0.1",
+    "rollup-plugin-svelte": "^5.1.0",
+    "rollup-plugin-terser": "^5.0.0",
+    "sirv-cli": "^0.4.4",
+    "svelte": "^3.5.1"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "autobuild": "rollup -c -w",
+    "dev": "run-p start:dev autobuild",
+    "start": "sirv docs",
+    "start:dev": "sirv docs --dev",
+    "build-rarity": "node tool/build-rarity > src/rarity.js"
+  }
+}

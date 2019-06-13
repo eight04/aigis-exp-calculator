@@ -5,6 +5,8 @@ Aigis EXP Calculator
 
 https://eight04.github.io/aigis-exp-calculator/
 
+![Screenshot](https://i.imgur.com/58C6m20.png)
+
 Credit
 ------
 

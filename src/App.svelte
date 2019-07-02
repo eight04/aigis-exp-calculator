@@ -1,9 +1,12 @@
 <script>
 import rarity from "./rarity.js";
+const storage = createStorage();
 const rarityNames = Object.keys(rarity);
-let selectedRarity = "iron";
-let goalLevel = rarity[selectedRarity].length;
+let selectedRarity = storage.get("selectedRarity", "iron");
+let goalLevel = Math.min(storage.get("goalLevel", 99), rarity[selectedRarity].length);
 const expUnits = {
+  "微金祝": 1750,
+  "小銀祝": 4000,
   "八倍白胖": 8000,
   "活動經驗包": 10000,
   "八倍皇帝": 16000,
@@ -13,11 +16,19 @@ const expUnits = {
   "八倍黑胖": 40000,
   "大祝聖哈比": 150000
 };
-const selectedUnits = Object.fromEntries(Object.entries(expUnits).map(([name]) => [name, 0]));
+const selectedUnits = Object.assign(
+  Object.fromEntries(Object.entries(expUnits).map(([name]) => [name, 0])),
+  storage.get("selectedUnits")
+);
 let totalExp = 0;
 $: requiredMinValue = rarity[selectedRarity][goalLevel - 1] - totalExp;
 let requiredMinLevel = 0;
-let sarietto = false;
+let sarietto = storage.get("sarietto", false);
+
+$: storage.set("selectedRarity", selectedRarity);
+$: storage.set("goalLevel", goalLevel);
+$: storage.set("selectedUnits", selectedUnits);
+$: storage.set("sarietto", sarietto);
 
 // calc total exp
 $: {
@@ -36,6 +47,22 @@ $: {
     requiredMinLevel = rarity[selectedRarity].length;
   }
   requiredMinLevel--;
+}
+
+function createStorage() {
+  return {get, set};
+  
+  function get(key, default_) {
+    const value = localStorage.getItem(key);
+    if (value === null) {
+      return default_;
+    }
+    return JSON.parse(value);
+  }
+  
+  function set(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+  }
 }
 </script>
 

@@ -16,6 +16,14 @@ const expUnits = {
   "八倍黑胖": 40000,
   "大祝聖哈比": 150000
 };
+const goalLevelPresets = {
+  iron: [],
+  bronze: [],
+  silver: [30, 50, 55],
+  gold: [20, 50, 60, 80, 99],
+  platinum: [50, 70, 90, 99],
+  black: [50, 80, 99]
+};
 const selectedUnits = Object.assign(
   Object.fromEntries(Object.entries(expUnits).map(([name]) => [name, 0])),
   storage.get("selectedUnits")
@@ -24,6 +32,8 @@ let totalExp = 0;
 $: requiredMinValue = rarity[selectedRarity][goalLevel - 1] - totalExp;
 let requiredMinLevel = 0;
 let sarietto = storage.get("sarietto", false);
+let goalLevelPresetNext;
+let goalLevelPresetPrev;
 
 $: storage.set("selectedRarity", selectedRarity);
 $: storage.set("goalLevel", goalLevel);
@@ -47,6 +57,33 @@ $: {
     requiredMinLevel = rarity[selectedRarity].length;
   }
   requiredMinLevel--;
+}
+
+// goal level cap
+$: {
+  if (goalLevel >= rarity[selectedRarity].length) {
+    goalLevel = rarity[selectedRarity].length;
+  }
+}
+
+// calc goal level default
+$: {
+  const defaults = goalLevelPresets[selectedRarity];
+  let index;
+  if (defaults[defaults.length - 1] < goalLevel) {
+    index = defaults.length;
+  } else {
+    index = defaults.findIndex(i => i >= goalLevel);
+  }
+  goalLevelPresetPrev = index > 0 ? defaults[index - 1] : null;
+  if (index >= 0 && defaults[index] === goalLevel) {
+    if (index + 1 < defaults.length) {
+      index++;
+    } else {
+      index = -1;
+    }
+  }
+  goalLevelPresetNext = index >= 0 ? defaults[index] : null;
 }
 
 function createStorage() {
@@ -80,8 +117,12 @@ input[type=number] {
 }
 .form-group {
   display: grid;
-  grid-template-columns: 50% 50%;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
+}
+.number-group {
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
 }
 .span-2 {
   grid-column-end: span 2;
@@ -106,7 +147,11 @@ input[type=number] {
     {/each}
   </select>
   <label for="goalLevel">目標等級</label>
-  <input id="goalLevel" type="number" bind:value={goalLevel}>
+  <div class="number-group">
+    <button type="button" on:click={() => goalLevel = goalLevelPresetPrev} disabled={!goalLevelPresetPrev} title={goalLevelPresetPrev || ""}>&lt;</button>
+    <input id="goalLevel" type="number" bind:value={goalLevel} min="0">
+    <button type="button" on:click={() => goalLevel = goalLevelPresetNext} disabled={!goalLevelPresetNext} title={goalLevelPresetNext || ""}>&gt;</button>
+  </div>
   <label class="span-2">
     <input type="checkbox" bind:checked={sarietto}>
     使用育成聖靈
@@ -119,7 +164,11 @@ input[type=number] {
       <label for={unitName}>
         {unitName} ({value})
       </label>
-      <input id={unitName} type="number" bind:value={selectedUnits[unitName]} min="0">
+      <div class="number-group">
+        <button type="button" on:click={() => selectedUnits[unitName]--} disabled={selectedUnits[unitName] < 1}>-</button>
+        <input id={unitName} type="number" bind:value={selectedUnits[unitName]} min="0">
+        <button type="button" on:click={() => selectedUnits[unitName]++}>+</button>
+      </div>
     {/each}
   </div>
 </fieldset>

@@ -32,8 +32,8 @@ let totalExp = 0;
 $: requiredMinValue = rarity[selectedRarity][goalLevel - 1] - totalExp;
 let requiredMinLevel = 0;
 let sarietto = storage.get("sarietto", false);
-let goalLevelPresetNext;
-let goalLevelPresetPrev;
+let goalLevelPresetNext = 0;
+let goalLevelPresetPrev = 0;
 
 $: storage.set("selectedRarity", selectedRarity);
 $: storage.set("goalLevel", goalLevel);
@@ -75,7 +75,7 @@ $: {
   } else {
     index = defaults.findIndex(i => i >= goalLevel);
   }
-  goalLevelPresetPrev = index > 0 ? defaults[index - 1] : null;
+  goalLevelPresetPrev = index > 0 ? defaults[index - 1] : 0;
   if (index >= 0 && defaults[index] === goalLevel) {
     if (index + 1 < defaults.length) {
       index++;
@@ -83,7 +83,7 @@ $: {
       index = -1;
     }
   }
-  goalLevelPresetNext = index >= 0 ? defaults[index] : null;
+  goalLevelPresetNext = index >= 0 ? defaults[index] : 0;
 }
 
 function createStorage() {

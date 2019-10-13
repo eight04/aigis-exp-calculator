@@ -11,3 +11,10 @@ Credit
 ------
 
 所有資料來自 [千年戦争アイギス攻略 Wiki*](https://wikiwiki.jp/aigiszuki/) 。包括累計經驗值表格，和吃掉聖靈可獲得的經驗量。
+
+Changelog
+---------
+
+* 2019.10.14
+
+  - Add: buttons to modify units and goal level.

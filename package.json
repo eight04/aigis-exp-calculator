@@ -2,23 +2,31 @@
   "name": "aigis-exp-calculator",
   "version": "0.0.0",
   "devDependencies": {
-    "cheerio": "^1.0.0-rc.3",
-    "node-fetch": "^2.6.0",
+    "@babel/eslint-parser": "^7.15.0",
+    "cheerio": "^1.0.0-rc.10",
+    "eslint": "^7.32.0",
+    "eslint-plugin-svelte3": "^3.2.0",
+    "node-fetch": "^3.0.0",
     "npm-run-all": "^4.1.5",
-    "rollup": "^1.23.1",
-    "rollup-plugin-livereload": "^1.0.4",
+    "rollup": "^2.56.3",
+    "rollup-plugin-css-only": "^3.1.0",
+    "rollup-plugin-livereload": "^2.0.5",
     "rollup-plugin-node-resolve": "^5.2.0",
-    "rollup-plugin-svelte": "^5.1.0",
-    "rollup-plugin-terser": "^5.1.2",
-    "sirv-cli": "^0.4.4",
-    "svelte": "^3.12.1"
+    "rollup-plugin-svelte": "^7.1.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "sirv-cli": "^1.0.14",
+    "svelte": "^3.42.4"
   },
   "scripts": {
+    "test": "eslint **/*.js **/*.svelte",
     "build": "rollup -c",
     "autobuild": "rollup -c -w",
     "dev": "run-p start:dev autobuild",
     "start": "sirv docs",
     "start:dev": "sirv docs --dev",
     "build-rarity": "node tool/build-rarity > src/rarity.js"
-  }
+  },
+  "eslintIgnore": [
+    "docs"
+  ]
 }

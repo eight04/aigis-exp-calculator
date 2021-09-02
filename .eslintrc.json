@@ -1,0 +1,27 @@
+{
+	"env": {
+		"node": true,
+		"es6": true
+	},
+	"extends": [
+		"eslint:recommended"
+	],
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2021,
+    "requireConfigFile": false,
+    "babelOptions": {
+      "parserOpts": {
+        "allowAwaitOutsideFunction": true
+      }
+    }
+  },
+  "parser": "@babel/eslint-parser",
+  "plugins": ["svelte3"],
+  "overrides": [
+    {
+      "files": ["*.svelte"],
+      "processor": "svelte3/svelte3"
+    }
+  ]
+}

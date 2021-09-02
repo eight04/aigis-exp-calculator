@@ -1,4 +1,5 @@
 <script>
+/* eslint-env browser */
 import rarity from "./rarity.js";
 const storage = createStorage();
 const rarityNames = Object.keys(rarity);
@@ -34,11 +35,13 @@ let requiredMinLevel = 0;
 let sarietto = storage.get("sarietto", false);
 let goalLevelPresetNext = 0;
 let goalLevelPresetPrev = 0;
+let custom = storage.get("custom", 0);
 
 $: storage.set("selectedRarity", selectedRarity);
 $: storage.set("goalLevel", goalLevel);
 $: storage.set("selectedUnits", selectedUnits);
 $: storage.set("sarietto", sarietto);
+$: storage.set("custom", custom);
 
 // calc total exp
 $: {
@@ -47,6 +50,7 @@ $: {
   for (const [name, count] of Object.entries(selectedUnits)) {
     totalExp += count * expUnits[name] * multiply / 10;
   }
+  totalExp += custom;
 }
 
 // calc required min level
@@ -170,5 +174,9 @@ input[type=number] {
         <button type="button" on:click={() => selectedUnits[unitName]++}>+</button>
       </div>
     {/each}
+    <label for="custom">
+      額外經驗值
+    </label>
+    <input id="custom" type="number" bind:value={custom} min="0">    
   </div>
 </fieldset>

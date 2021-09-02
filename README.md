@@ -15,6 +15,10 @@ Credit
 Changelog
 ---------
 
+* 2021.9.2
+
+  - Add: cutom exp field.
+
 * 2019.10.14
 
   - Add: buttons to modify units and goal level.

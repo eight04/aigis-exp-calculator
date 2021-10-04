@@ -15,6 +15,11 @@ Credit
 Changelog
 ---------
 
+* 2021.10.4
+
+  - Change: update storage key, avoid app conflict.
+  - Add: black unit x8 (8400).
+
 * 2021.9.2
 
   - Add: cutom exp field.

@@ -9,6 +9,7 @@ const expUnits = {
   "微金祝": 1750,
   "小銀祝": 4000,
   "八倍白胖": 8000,
+  "八倍黑角": 8400,
   "活動經驗包": 10000,
   "八倍皇帝": 16000,
   "小金祝/贈送祝聖": 18000,
@@ -90,11 +91,11 @@ $: {
   goalLevelPresetNext = index >= 0 ? defaults[index] : 0;
 }
 
-function createStorage() {
+function createStorage(prefix = "aigis-exp-calculator") {
   return {get, set};
   
   function get(key, default_) {
-    const value = localStorage.getItem(key);
+    const value = localStorage.getItem(`${prefix}/${key}`);
     if (value === null) {
       return default_;
     }
@@ -102,7 +103,7 @@ function createStorage() {
   }
   
   function set(key, value) {
-    localStorage.setItem(key, JSON.stringify(value));
+    localStorage.setItem(`${prefix}/${key}`, JSON.stringify(value));
   }
 }
 </script>

@@ -6,17 +6,16 @@ const rarityNames = Object.keys(rarity);
 let selectedRarity = storage.get("selectedRarity", "iron");
 let goalLevel = Math.min(storage.get("goalLevel", 99), rarity[selectedRarity].length);
 const expUnits = {
+  "同階聖靈": 1000,
   "微金祝": 1750,
+  "黑角": 3000,
   "小銀祝": 4000,
-  "八倍白胖": 8000,
-  "八倍黑角": 8400,
+  "白胖": 5000,
   "活動經驗包": 10000,
-  "八倍皇帝": 16000,
-  "八倍皇帝(自食)": 18400,
   "小金祝/贈送祝聖": 18000,
   "小白祝": 19000,
   "小黑祝": 20000,
-  "八倍黑胖": 40000,
+  "黑胖": 40000,
   "大祝聖哈比": 150000
 };
 const goalLevelPresets = {
